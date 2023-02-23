@@ -1,0 +1,85 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  style 
+    include kasse.css
+    include common.css
+  script(src="/server.js")
+  script(src="/logik.js")
+  title PaperSign
+.tabbtn
+  form(action = "/" method="get")
+    input#tabSelect(class="button" type="submit" value="Kasse")
+  form(action = "/faktura" method="get")
+    input(class="button" type="submit" value="Faktura")
+  form(action= "/crud" method="get")
+    input(class="button" type="submit" value="Produkter")
+  button(hidden class="button" id="dmode" value="Dark Mode" onclick='(function(){var element = document.body; element.classList.toggle("dark-mode"); darkmode=true;})();')    
+h1#tabTitle PaperSign Kasse
+.parent
+  .child1
+    form.div2(type="hidden" action = "/search", method="get")
+      select#atribut(name="atribut")
+          option(value='' disabled='' selected='') Attribute
+          option(value='navn') Navn
+          option(value='pris') Pris
+          option(value='antal') Antal
+          option(value='leveradør') Leverandør
+          option(value='bestillingsnummer') Bestillingsnummer
+      input#value(type='text' name="value" placeholder='Søgeværdi')
+      input(class='button' type="submit", value="Søg")
+    form#pg(type="hidden" action = "/kasse", method="get")
+      select#pg(name='pgroup' onchange='this.form.submit()')
+        option(value='' disabled='' selected='') Produktgrupper
+        option(id='visalt' value='visalt') VisAlle
+        each d of produktgrupper
+          if(d.gruppeNr==pgid)
+            option(value=""+d.gruppeNr+"" selected)= '' + d.navn
+          else 
+            option(value=""+d.gruppeNr+"")= '' + d.navn
+        option(id='intet' value='intet') *Intet
+    p#titleP Produkter
+    form.div3(type="hidden" action = "kassetilfoej", method="get") 
+      select#produktList(value="" name='produktList' size="3")
+        each data in produkter
+          option(value=(data.produktNr+"."+data.navn+"."+data.pris) placeholder="")= data.produktNr + ": " + data.navn + ' ' + data.pris + ',-kr'
+      input#antal(type='number' name="antal" placeholder='Antal')
+      button#tilfoejProdukt(class='button' type="submit") Tilføj
+  .child2
+    form(action = "/kasseannullere" method="get")
+      button#annullere(type="submit" value="Kasse") Tøm Kurv
+    p#titleK Kurv
+    form#c2(action="underskrift")
+      .child22
+        select#kurv(name='kurv' size="3")
+          if (kurv!=null)
+            each k of kurv
+              option(value=""+k.navn+"" selected)= k.antal +'stk. ' + k.navn + ' ' + k.pris +' Total:' + k.total
+        input#total(type='text' placeholder=''+betalt+'kr' readonly)
+        button#rrabat(name="rrabat" value="rabat" formaction="kasserabat") Tilf&oslash;j Rabat
+        input#rabat(name="rabat" type='number' placeholder='Rabat')
+        button(class="button" type="submit" value="slet" formaction="kasseslet" method="get") Slet
+        //- form#betalling(type="hidden" action = "underskrift", method="get") 
+        select#betalling(name='betalling' method="" onchange="if (this.selectedIndex==4) this.form.submit()")
+          option(value='' disabled='' selected='') Betallingsform
+          option(value='Kort') Kort
+          option(value='Kontant') Kontant
+          option(value='MobilPay') MobilPay
+          option(value='Underskrift') Underskrift
+        input#beloeb(type='number' name='beloeb' value=''+betalt+'')
+        button#koeb(formaction="kassebetal" method="get") K&oslash;b
+  form.child3
+    if (lavP!=undefined)
+      .paamindelse
+        .paamindelseT
+          h3 Påmindelse
+        .paamindelseP
+          each lp of lavP
+            a(href="/CRUD/"+lp.gruppeNr+"&"+lp.produktNr)= lp.navn + " antal: " + lp.antal
+            <br>
+#psLogo
+  img(src='/images/papersignLogo.png') 
+
+

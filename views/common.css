@@ -1,0 +1,126 @@
+/* Font */
+
+p,
+input,
+button,
+select {
+    font-size: 125%;
+}
+
+body {
+    font-family: 'SF Pixelate', sans-serif;
+}
+
+/* Tab Buttons */
+
+.tabbtn {
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    /* grid-column-gap: 2px; */
+    grid-row-gap: 2px;
+    background-color: rgb(100, 195, 100);
+    height: 50px;
+    box-shadow: 0 4px 10px -0px gray;
+    /* box-sizing: border-box;
+    padding: 5px;
+    margin: 0; */
+}
+
+
+.tabbtn input {
+    /* margin: 2px; */
+    width: 100px;
+    height: 100%;
+    background-color: rgb(100, 195, 100);
+    color: white;
+    border: 0px;
+}
+
+.tabbtn input:hover {
+    /* margin: 2px; */
+    background-color: rgb(120, 195, 120);
+    border-bottom: 2px solid rgb(255, 255, 255);
+}
+
+#tabSelect{
+    background-color: rgb(120, 195, 120)
+}
+
+/* Background */
+
+body {
+    background-image: linear-gradient(white, rgb(100, 195, 100));
+    background-attachment: fixed;
+    height: 100%;
+}
+
+/* Set number inputs to have no arrows */
+/* others */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.dark-mode {
+    background-image: linear-gradient(rgb(43, 43, 43), rgb(23, 23, 23));
+    background-attachment: fixed;
+    height: 100%;
+    color: white;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(3, 35%);
+    grid-template-rows: repeat(1, 100px);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    margin: 4px;
+    padding: 4px;
+}
+
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#tabTitle{
+    margin: 4px;
+    padding: 6px;
+}
+
+#psLogo {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+}
+#psLogo img {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 37.5px;
+    width: 90.5px;
+}
+
+a:link {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    text-decoration: none;
+  }

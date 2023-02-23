@@ -1,0 +1,301 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  style 
+    include crud.css
+    include common.css
+  script(src='logik.js')
+
+  script.
+   //Post metode til funktion. 
+      async function post(url, objekt) {
+      const respons = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(objekt),
+      headers: {
+      'Content-Type': 'application/json'
+      }
+      });
+      if (respons.status !== 201) // Created
+      throw new Error(respons.status);
+      return await respons.text();
+    }
+
+    //eventlistener og handleselect, gør at når man trykker på en produktgruppe får man produktgruppenummeret. 
+    document.addEventListener('DOMContentLoaded',()=>{
+        document
+          .getElementById('produktGList')
+          .addEventListener('input', handleSelect)
+    })
+    function handleSelect (ev){
+      let chosenProduckGoup = ev.target.value;
+      result = chosenProduckGoup.split(" ");
+      index = result.length - 1
+      aktuelGroupNr = result[index]
+      localStorage.setItem('groupNr',aktuelGroupNr)
+      produktsInGroup(aktuelGroupNr)
+    }
+    //updatere listen der viser produkter i den pågældende produktgruppe. 
+    //og opdatere siden. 
+    let produktsInGroup = async (aktuelGroupNr) => {
+      try {
+      await post("/seachProduktinGroup", {valgtGruppeNr: aktuelGroupNr});
+      window.location.href = "/CRUD"
+      }catch(e){
+      console.log("Fejl");
+      }
+    }
+
+    //eventlistener og handleselect,2 gør at når man trykker på en produkt får man produktnummeret. 
+    document.addEventListener('DOMContentLoaded',() => {
+      document
+        .getElementById('produktList')
+        .addEventListener('input', handleSelect2)
+    })
+    function handleSelect2 (ev){
+      let chosenProdukt = ev.target.value;
+      result = chosenProdukt.split(" ");
+      index = result.length - 1
+      aktuelProduktNr = result[index]
+      localStorage.setItem('produktNr',aktuelProduktNr)
+      aktuelProduktNrTilServer(aktuelProduktNr)
+    }
+    //sender valgte produktnr til servern så det kan bruges senere.
+    //og opdatere siden. 
+    let aktuelProduktNrTilServer = async (aktuelProduktNr) => {
+      try {
+      await post("/aktuelProduktNrTilServer", {aktuelProduktNr: aktuelProduktNr});
+      window.location.href = "/CRUD"
+      }catch(e){
+      console.log("Fejl");
+      }
+    }
+
+    //funktionen læser ønsket produktgruppenavn og produktgruppebeskrivelse som er indtastet af brugeren, og sender det til serveren,
+    //som opretter en ny produktgruppe. denne metode opdatere også websiden.
+    let createProductgroup = async () => {
+      var produktGruppeNavn = document.getElementById("navnG").value;
+      var produktGruppeBeskrivelse = document.getElementById("beskrilseG").value;
+      try {
+      await post("/opretProduktGruppe", {produktGruppeNavn: produktGruppeNavn, produktGruppeBeskrivelse: produktGruppeBeskrivelse});
+      window.location.href = "/CRUD"
+      }catch(e){
+        console.log("Fejl");
+      } 
+    }
+    
+    //funktionen tjekker om at den valgte produktgruppe er tom for produkter og derefter bekræfter brugeren,
+    // om de ønsker en bestemt produktgruppe skal slettes.
+    //funktionen sender derefter valgte produktgruppenr til serveren, som så sletter produktgruppen, og opdatere siden. 
+    let deleteProductGroup = async (ProduktInProduktGouplength) => {
+      if (ProduktInProduktGouplength == 0 && confirm("Er du sikker på at du vil slette denne produktgruppe?")==true) {
+        try {
+        await post("/deleteProductGroup", {aktuelGroupNr: localStorage.getItem('groupNr')});
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log("Fejl");
+        }
+        } else {
+        alert("Du kan ikke slette en produktgruppe som indeholder produkter")
+        }
+      }
+    
+    //Funktionen læser ønsket produktgruppenavn og beskrivelse, og derefter tjekker om, kaldet af metoden kommer fra søgefunktionen eller direkte fra crud. 
+    //derefter opdatere funktionen den valgte produktgruppe med de tidligere læste produktgruppenavn og beskrivelse.
+    //og til sidst opdatere funktionen websiden. 
+    let updateProductGroup = async (fromSearch, valgtGruppeNr) => {
+      var produktGruppeNavn = document.getElementById("navnG").value;
+      var produktGruppeBeskrivelse = document.getElementById("beskrilseG").value;
+      if (fromSearch == "1"){
+        try {
+        await post("/updateProduktGroup", {aktuelGroupNr: valgtGruppeNr,produktGruppeNavn: produktGruppeNavn, produktGruppeBeskrivelse: produktGruppeBeskrivelse });
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log("Fejl");
+        }
+      }
+      else if(fromSearch == "0"){
+        try {
+        await post("/updateProduktGroup", {aktuelGroupNr: localStorage.getItem('groupNr'),produktGruppeNavn: produktGruppeNavn, produktGruppeBeskrivelse: produktGruppeBeskrivelse });
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log("Fejl");
+        } 
+      }
+    }
+
+    //funktionen læser ønsket attributter som er indtastet af brugeren.
+    //derefter tjekker funktionen om kaldet af metoden kommer fra søgefunktionen eller direkte fra crud. 
+    //også sender attributer til serveren som opretter et nyt produkt. 
+    //denne metode opdatere også websiden med den nye produkt.
+    let createProduct = async (fromSearch, valgtGruppeNr) => {
+      var produktNavn = document.getElementById("navn").value;
+      var produktPris = document.getElementById("pris").value;
+      var produktAntal = document.getElementById("antal").value;
+      var leveradør = document.getElementById("leveradoer").value;
+      var bestillingsnummer = document.getElementById("bestillingsnummer").value;
+      if (fromSearch == "1"){
+        try {
+        await post("/opretProdukt", {gruppeNr: valgtGruppeNr, produktNavn:  produktNavn, produktPris: produktPris, produktAntal: produktAntal, leveradør: leveradør, bestillingsnummer: bestillingsnummer});
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log(Fejl);
+        } 
+      }  
+      else if(fromSearch == "0"){
+        try {
+        await post("/opretProdukt", {gruppeNr: localStorage.getItem('groupNr'), produktNavn:  produktNavn, produktPris: produktPris, produktAntal: produktAntal, leveradør: leveradør, bestillingsnummer: bestillingsnummer});
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log(Fejl);
+        }  
+      } 
+    } 
+
+    //funktionen tjekker om kaldet af metoden kommer fra søgefunktionen eller direkte fra crud. 
+    //også sender valgteproduktnr til serveren som sletter det valgte produkt. 
+    //denne metode opdatere også websiden uden det slettede produkt.
+    let deleteProduct = async (fromSearch,valgtProduktNr) => {
+      if (fromSearch == "1"){
+        try {
+        await post("/deleteProdukt", {aktuelProduktNr: valgtProduktNr});
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log("Fejl");
+        } 
+      }
+      else if(fromSearch == "0"){
+        try {
+        await post("/deleteProdukt", {aktuelProduktNr: localStorage.getItem('produktNr')});
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log("Fejl");
+        } 
+      }
+    }
+
+    //funktionen læser ønskede attributter som er indtastet af brugeren.
+    //derefter tjekker funktionen om kaldet af metoden kommer fra søgefunktionen eller direkte fra crud. 
+    //også sender attributer til serveren som opdatere det valgte produkt via valgtegruppenr og valgteproduktnr. 
+    //denne metode opdatere også websiden med det opdaterede produkt. 
+    let updateProduct = async (fromSearch,valgtGruppeNr,valgtProduktNr) => {
+      var produktNavn = document.getElementById("navn").value;
+      var produktPris = document.getElementById("pris").value;
+      var produktAntal = document.getElementById("antal").value;
+      var leveradør = document.getElementById("leveradoer").value;
+      var bestillingsnummer = document.getElementById("bestillingsnummer").value;
+      if (fromSearch == "1"){
+        try {
+        await post("/updateProdukt", {aktuelProduktNr: valgtProduktNr, gruppeNr: valgtGruppeNr, produktNavn: produktNavn, produktPris: produktPris, produktAntal: produktAntal, leveradør: leveradør, bestillingsnummer: bestillingsnummer });
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log(Fejl);
+        } 
+      }
+      else if (fromSearch == "0"){
+        try {
+        await post("/updateProdukt", {aktuelProduktNr: localStorage.getItem('produktNr'), gruppeNr: localStorage.getItem('groupNr'), produktNavn: produktNavn, produktPris: produktPris, produktAntal: produktAntal, leveradør: leveradør, bestillingsnummer: bestillingsnummer });
+        window.location.href = "/CRUD"
+        }catch(e){
+        console.log(Fejl);
+        } 
+      }
+    }
+
+    //ved tryk på søg knappen, læser funktionen den attribut og værdi man ønsker at søge efter. 
+    //og sender brugeren videre til søgesiden.. 
+    let search = async () => {
+      var attribut = document.getElementById("atribut").value;
+      var value = document.getElementById("value").value; 
+      try {
+      window.location.href = "/search?atribut=" + attribut + "&value=" + value
+      }catch(e){
+      console.log("Fejl");
+      } 
+    }
+
+
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  style 
+    include crud.css
+    include common.css
+  script(src='logik.js')
+  title PaperSign
+.tabbtn
+  form(action = "/" method="get")
+    input(class="button" type="submit" value="Kasse")
+  form(action = "/faktura" method="get")
+    input(class="button" type="submit" value="Faktura")
+  form(action= "/crud" method="get")
+    input#tabSelect(class="button" type="submit" value="Produkter")
+h1#tabTitle PaperSign Produkter
+.parent
+  .child1
+    select#atribut(name="atribut")
+      option(value='' disabled='' selected='') Attribute
+      option(value='navn') Navn
+      option(value='pris') Pris
+      option(value='antal') Antal
+      option(value='leveradør') Leverandør
+      option(value='bestillingsnummer') Bestillingsnummer    
+    input#value(type='text' placeholder='Værdi')
+    button#search(onclick = 'search()') S&oslash;g
+    p#titleP Produktgrupper
+    select#produktGList(name='pgroups' multiple='')
+      each data in produktgrupper
+        option()= data.navn + " "+ data.gruppeNr
+    button#tilfoejProduktG(onclick='if (confirm("Er du sikker på at du vil oprette denne produktgruppe?")==true) createProductgroup()') Tilf&oslash;j
+    button#updaterProduktG(onclick='if (confirm("Er du sikker på at du vil opdatere denne produktgruppe?")==true) updateProductGroup(' + fromSearch +"," + valgtGruppeNr + ')') Opdater
+    button#sletProduktG(onclick='deleteProductGroup('+ProduktInProduktGoup.length+')') Slet
+    if (valgtGruppeNr == undefined)
+        input#navnG(type='text' placeholder='Navn')
+        input#beskrilseG(type='text' placeholder='Beskrivelse')
+
+    each data in produktgrupper 
+      if (data.gruppeNr == valgtGruppeNr)
+        input#navnG(title="Navn" type='text' placeholder='Navn' value = data.navn)
+        input#beskrilseG(title="Beskrivelse" type='text' placeholder='Beskrivelse' value = data.beskrivelse)
+        - break 
+    
+  .child2
+    p#titleB  
+    p#titleK Produkter
+    select#produktList(name='productsForGroup' multiple='')
+      each data in ProduktInProduktGoup
+          option()= 'Navn: ' + data.navn + " " + data.produktNr
+    button#tilfoejProdukt(onclick='if (confirm("Er du sikker på at du vil oprette dette produkt?")==true) createProduct(' + fromSearch +"," + valgtGruppeNr + ')') Tilf&oslash;j
+    button#updateProdukt(onclick='if (confirm("Er du sikker på at du vil opdatere dette produkt?")==true) updateProduct(' + fromSearch +"," + valgtGruppeNr + "," + valgtProduktNr + ')') Opdater
+    button#sletProdukt(onclick='if (confirm("Er du sikker på at du vil slette dette produkt?")==true) deleteProduct(' + fromSearch +"," + valgtProduktNr + ')') Slet
+  
+    if (valgtProduktNr == undefined)
+        input#navn(type='text' placeholder='Navn')
+        input#pris(type='number' placeholder='Pris')
+        input#antal(type='number' placeholder='Antal')
+        input#leveradoer(type='text' placeholder='Leverandør')
+        input#bestillingsnummer(type='text' placeholder='Bestillingsnummer')
+
+    each data in ProduktInProduktGoup
+      if (data.produktNr == valgtProduktNr)
+        input#navn(title="Navn" type='text' placeholder='Navn' value = data.navn)
+        input#pris(title="Pris" type='number' placeholder='Pris' value = data.pris)
+        input#antal(title="Antal" type='number' placeholder='Antal' value = data.antal)
+        input#leveradoer(title="Leverandør" type='text' placeholder='Leverandør' value = data.leveradør)
+        input#bestillingsnummer(title="Bestillingsnummer" type='text' placeholder='Bestillingsnummer' value = data.bestillingsnummer)
+        - break
+  form.child3
+    if (lavP!=undefined)
+      .paamindelse
+        .paamindelseT
+          h3 Påmindelse
+        .paamindelseP
+          each lp of lavP
+            a(href="/CRUD/"+lp.gruppeNr+"&"+lp.produktNr)= lp.navn + " antal: " + lp.antal + " PGnr: " +lp.gruppeNr + " Pnr: " +lp.produktNr
+            <br>
+#psLogo
+  img(src='/images/papersignLogo.png') 

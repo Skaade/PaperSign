@@ -1,0 +1,56 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  style 
+    include ordre.css
+    include common.css
+  script(src='logik.js')
+  script(src='server.js')
+  title PaperSign
+.tabbtn
+  form(action = "/" method="get")
+    input(class="button" type="submit" value="Kasse")
+  form(action = "/faktura" method="get")
+    input(class="button" type="submit" value="Faktura")
+  form(action= "/crud" method="get")
+    input(class="button" type="submit" value="Produkter")
+h1#tabTitle PaperSign Ordre
+.ordre
+  div#productHeader="Ordre: "
+  div#productHeader= specifikOrdre.ordreNr+""
+  div#productHeader= "Dato: "
+  div#productHeader= specifikOrdre.dato +""
+  div#productHeader= "Samlet Pris: "
+  div#productHeader= specifikOrdre.samletpris +",-"
+  -var id = 1
+    each fisk in specifikOrdre.betalingsmetode
+      div#productHeader= id + " Betalingsmetode: "
+      div#productHeader= "" + fisk.betalling
+      div#productHeader= id + " Beløb: " 
+      div#productHeader= fisk.beloeb + ",-"
+      -id=id+1
+    if (specifikOrdre.navn == "")
+      div#productHeader= "Betaler: "
+      div#productHeader= "Anonym betaling "
+    else
+      div#productHeader= "Betaler: "
+      div#productHeader= specifikOrdre.navn +""
+
+  .ordrelinjer
+    .overskrifter
+      .overskrift Varenr
+      .overskrift Navn
+      .overskrift Pris
+      .overskrift Antal
+      .overskrift Total
+    each data in specifikOrdre.ordrelinjer
+      .ordrelinje
+        div#info= data.produktnr
+        div#info= data.navn
+        div#info= data.pris
+        div#info= data.antal 
+        div#info= data.total
+#psLogo
+  img(src='/images/papersignLogo.png') 

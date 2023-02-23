@@ -1,0 +1,106 @@
+/* --------------------------------------------------------------- */
+
+/* Big grid */
+
+/* --------------------------------------------------------------- */
+
+/* Big grid children */
+.child1,
+.child2 {
+    display: grid;
+    grid-template-columns: repeat(3, 30%);
+    grid-template-rows: repeat(15, 40%);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+}
+
+.child1 {
+    grid-column-start: 1;
+}
+
+.child2 {
+    grid-column-start: 2;
+}
+
+/* --------------------------------------------------------------- */
+
+/* Grid Content */
+
+/* Listviews */
+.child1 #produktGList,
+.child2 #produktList {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 10;
+
+}
+
+
+/* Titles */
+.child1 #titleP,
+.child2 #titleK {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+
+}
+
+.child1 #value {
+    grid-column-start: 2;
+    grid-column-end: 2;
+
+}
+
+.child1 #atribut {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+/* Inputs */
+
+.child2 #tilfoejAtr {
+    grid-column-end: 3;
+}
+
+
+.child1 input,
+.child2 input {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.child2 #titleB {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 4;
+
+}
+
+.paamindelseT {
+    background-image: linear-gradient(rgb(255, 255, 125), rgb(255, 255, 180));
+    /* box-shadow: 0 1px 20px -0px rgb(197, 197, 197); */
+    padding: 2px;
+    margin: 2px;
+}
+
+.paamindelse {
+    width: 80%;
+    background-image: linear-gradient(rgb(255, 255, 125), rgb(255, 255, 199));
+    box-shadow: 0 1px 20px -0px rgb(197, 197, 197);
+}
+
+.paamindelseP {
+    padding: 5px;
+    margin: 5px;
+}
+
+body{
+    overflow-x: hidden;
+}
+
+
+/* --------------------------------------------------------------- */

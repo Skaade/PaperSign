@@ -1,0 +1,101 @@
+ /* unvisited link */
+ a:link {
+   color: rgb(0, 0, 0);
+   text-decoration: none;
+ }
+
+ /* visited link */
+ a:visited {
+   color: rgb(0, 0, 0);
+   text-decoration: none;
+ }
+
+ a {
+   line-height: 130%;
+ }
+
+ .vareattributter {
+   display: grid;
+   grid-template-columns: repeat(6, 14%);
+   grid-template-rows: 5% 95%;
+   grid-column-gap: 2px;
+   grid-row-gap: 2px;
+   margin: 8px;
+   border: 2px solid black;
+   height: 74.5%;
+   box-shadow: 0 2px 4px -0px black;
+   background-image: linear-gradient(white, rgb(199, 199, 199));
+ }
+
+ .attributter,
+ #info {
+   padding: 3px;
+ }
+
+ .div2{
+  display: grid;
+  grid-template-columns: repeat(3, 14%);
+  grid-template-rows: repeat(1, 71%);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  font-size: 100%;
+  padding: 4px;
+  margin: 4px;
+  height: 7.5%;
+  width: 74%;
+}
+
+.overskrifter{
+  display: grid;
+  grid-template-columns: repeat(7, 14.9%);
+  grid-template-rows: repeat(100, 100%);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  border-bottom: 2px solid black;
+  width: 100%; 
+  grid-column-start: 1;
+  grid-column-end: 8;
+}
+
+.soegeresultater{
+  display: grid;
+  grid-template-columns: repeat(7, 14.9%);
+  grid-template-rows: repeat(100, 5%);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  grid-column-start: 1;
+  grid-column-end: 8;
+  
+}
+
+.soegeresultat{
+  display: grid;
+  grid-template-columns: repeat(7, 14.35%);
+  grid-template-rows: repeat(100, 100%);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  padding: 2px;
+  grid-column-start: 1;
+  grid-column-end: 8;
+}
+
+.soegeresultat:hover{
+
+  background-color: rgb(120, 195, 120);
+  color: white;
+  border-bottom: 2px solid black;
+}
+
+body{
+  overflow: hidden;
+}
+
+.soegeresultat{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

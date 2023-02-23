@@ -1,0 +1,48 @@
+#sig {
+    border: 3px;
+    margin: 9px;
+    padding: 8px;
+    border-style: solid;
+    background-color: white;
+}
+
+.funct {
+    display: grid;
+    grid-template-columns: repeat(4, 154px);
+    grid-template-rows: repeat(8, 20%);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    margin: 4px;
+    padding: 4px;
+}
+
+#vareList {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 5;
+}
+
+#total {
+    grid-row-start: 5;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    text-align: right;
+}
+
+.underskrift {
+    /* margin: 1px;
+    padding: 1px;    */
+}
+
+#tabTitle2 {
+    margin: 4px;
+    padding: 6px;
+    height: 5.5%;
+    font-size: 195%;
+}
+
+button{
+    border: 1.5px transparent gray;
+}
+

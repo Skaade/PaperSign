@@ -1,0 +1,49 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  style 
+    include common.css
+    include search.css
+  script(src='logik.js')
+  title PaperSign
+.tabbtn
+  form(action = "/" method="get")
+    input(class="button" type="submit" value="Kasse")
+  form(action = "/faktura" method="get")
+    input(class="button" type="submit" value="Faktura")
+  form(action= "/crud" method="get")
+    input(class="button" type="submit" value="Produkter")
+h1#tabTitle PaperSign Search
+form.div2(action = "/search", method="get")
+  select#atribut(name="atribut")
+    option(value='' disabled='' selected='') Attribute
+    option(value='navn') Navn
+    option(value='pris') Pris
+    option(value='antal') Antal
+    option(value='leveradør') Leverandør
+    option(value='bestillingsnummer') Bestillingsnummer
+  input#value(type='text' name="value" placeholder='Søgeværdi')
+  input(class='button' type="submit", value="Søg")
+.vareattributter
+  .overskrifter
+    .attributter Varenummer
+    .attributter Navn
+    .attributter Pris
+    .attributter Antal
+    .attributter Leverandør 
+    .attributter Bestillingsnummer 
+    .attributter Produktgruppenr
+  .soegeresultater
+    each data in search
+      .soegeresultat
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.produktNr
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr + '')= data.navn
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.pris
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.antal 
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.leveradør 
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.bestillingsnummer
+        a#info(class='productHeader' href='/CRUD/'+ data.gruppeNr+"&"+data.produktNr +'')= data.gruppeNr
+#psLogo
+  img(src='/images/papersignLogo.png') 
